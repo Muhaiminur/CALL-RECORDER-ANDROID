@@ -37,7 +37,17 @@ public class RecorderService extends Service {
 
         String rec=path+"/"+phoneNumber+"_"+time+".mp4";
 
-        recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_COMMUNICATION);
+        try {
+            recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_COMMUNICATION);
+        } catch (Exception e) {
+            Log.d("Error Line Number", Log.getStackTraceString(e));
+            try {
+                recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+            } catch (Exception e2) {
+                Log.d("Error Line Number", Log.getStackTraceString(e2));
+                recorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
+            }
+        }
         recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
 
